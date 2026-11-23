@@ -28,3 +28,17 @@ dump("B", q(f'SELECT ?s ?line ?lname WHERE {{ ?s {STATION} ?s wdt:P81 ?line. OPT
 time.sleep(5)
 # 路線(P81)が未入力の駅向けに運営会社(P137)も取得
 dump("D", q(f'SELECT ?s ?oname WHERE {{ ?s {STATION} ?s wdt:P137 ?o. ?o rdfs:label ?oname FILTER(LANG(?oname)="ja") }}'))
+time.sleep(5)
+# 所在自治体の名称（「区」を判定して人口不明の町村と区を区別する）と駅の座標
+dump("E", q(f'SELECT DISTINCT ?c ?cname WHERE {{ ?s {STATION} ?s wdt:P131 ?c. ?c rdfs:label ?cname FILTER(LANG(?cname)="ja") }}'))
+time.sleep(5)
+dump("F", q(f'SELECT ?s ?coord WHERE {{ ?s {STATION} ?s wdt:P625 ?coord }}'))
+time.sleep(5)
+# 町丁レベルの所在地から、親の区・市・町・村を辿る（応答が大きいと切れるので200件ずつ）
+cities = sorted({x["c"]["value"].rsplit("/", 1)[1] for x in json.load(open(f"{OUT}/E.json"))})
+G = []
+for i in range(0, len(cities), 200):
+    vals = " ".join("wd:" + c for c in cities[i:i + 200])
+    G += q(f'SELECT DISTINCT ?c ?m ?mname WHERE {{ VALUES ?c {{{vals}}} ?c wdt:P131* ?m. ?m rdfs:label ?mname FILTER(LANG(?mname)="ja" && REGEX(?mname, "[区市町村]$")) }}')
+    time.sleep(3)
+dump("G", G)

@@ -5,6 +5,11 @@ CLOSED = {"東滝川", "抜海", "雄信内"}  # 廃駅（明示除外）
 def load(W):
     L = lambda n: json.load(open(f"{W}/{n}.json"))
     A, B, C, P, D = L("A"), L("B"), L("C"), L("prefs"), L("D")
+    cname = {x["c"]["value"].rsplit("/", 1)[1]: x["cname"]["value"] for x in L("E")}
+    coord = {}
+    for x in L("F"):
+        m = re.match(r"Point\(([-\d.]+) ([-\d.]+)\)", x["coord"]["value"])
+        if m: coord[x["s"]["value"].rsplit("/", 1)[1]] = (float(m.group(2)), float(m.group(1)))
     qp = {v: k for k, v in P.items()}; qid = lambda u: u.rsplit("/", 1)[1]
     c2p, pop = collections.defaultdict(set), {}
     for x in C:
@@ -38,4 +43,6 @@ def load(W):
         e["lines"].update(lines.get(s) or {}); e["cities"] |= d["cities"]
         if not lines.get(s): e["noline"] = True; e["ops"] = e.get("ops", set()) | ops[s]
         e["pop"] = max([e["pop"]] + [pop.get(c, 0) for c in d["cities"]])
+        e["cnames"] = e.get("cnames", set()) | {cname[c] for c in d["cities"] if c in cname}
+        if s in coord: e.setdefault("coords", []).append(coord[s])
     return list(merged.values())

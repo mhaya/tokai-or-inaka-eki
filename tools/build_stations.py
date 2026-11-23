@@ -14,11 +14,23 @@ head = src.split("const PREFECTURE_STATIONS")[0]
 D = json.loads(re.sub(r",(\s*[\]}])", r"\1", src[src.index("{"):src.rindex("}") + 1]))
 for p in D: D[p] = [x for x in D[p] if x[3] != "estimated"]
 M = load(W); idx = {(e["pref"], e["name"]): e for e in M}
+def kind(e):
+    """人口が取れない自治体を区別する: ward=東京23区・政令市の区(都市部) / town=町村 / city=人口未登録の市"""
+    if e["pop"]: return "N"
+    ns = e.get("cnames", set())
+    if any(n.endswith("区") for n in ns): return "T" if e["pref"] == "東京都" else "O"
+    if ns and all(n.endswith(("町", "村")) for n in ns): return "town"
+    return "city"
 def pb(e):
-    p = e["pop"]; return 5 if p == 0 else 0 if p < 20000 else 1 if p < 60000 else 2 if p < 150000 else 3 if p < 400000 else 4
+    k = kind(e)
+    if k in ("T", "O"): return 5
+    if k == "town": return 0
+    if k == "city": return 2
+    p = e["pop"]; return 0 if p < 20000 else 1 if p < 60000 else 2 if p < 150000 else 3 if p < 400000 else 4
 def key(e):
     n = 1 if e.get("noline") else len(e["lines"])
-    return ("T" if e["pref"] == "東京都" and e["pop"] == 0 else "O" if e["pop"] == 0 else "N", pb(e), 0 if n <= 1 else 1 if n == 2 else 2)
+    k = kind(e)
+    return (k if k in ("T", "O") else "N", pb(e), 0 if n <= 1 else 1 if n == 2 else 2)
 tab = {}
 for p, rs in D.items():
     for x in rs:
