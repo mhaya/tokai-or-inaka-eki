@@ -56,7 +56,7 @@ function pickExplore(n){
   if(pool.length<n) pool=pool.concat(shuffle(ALL.filter(s=>s.status==='calibrated')));
   const out=[];pool=pool.slice();
   while(out.length<n&&pool.length){
-    const w=pool.map(s=>1+(s.rank>=3&&s.rank<=7?2:0));
+    const w=pool.map(s=>(s.rank>=3&&s.rank<=7?3:1)*(s.status==='unverified'?2:1));
     let r=Math.random()*w.reduce((a,b)=>a+b,0),i=0;
     while((r-=w[i])>0)i++;
     out.push(pool.splice(i,1)[0]);
@@ -69,8 +69,8 @@ function start(mode){
 }
 function home(){
   S=null;
-  const un=ALL.filter(s=>s.status!=='calibrated').length;
-  $.innerHTML=`<div class="card"><p>駅の「都会度」を10段階で当てよう。5問・100点満点。<br><span class="mut">ぴったり20点／±1ランク10点。収録 ${ALL.length}駅（未検証 ${un}駅）</span></p>
+  const cnt=st=>ALL.filter(s=>s.status===st).length;
+  $.innerHTML=`<div class="card"><p>駅の「都会度」を10段階で当てよう。5問・100点満点。<br><span class="mut">ぴったり20点／±1ランク10点。収録 ${ALL.length}駅（確定 ${cnt('calibrated')}／未検証 ${cnt('unverified')}／自動推定 ${cnt('estimated')}）</span></p>
   <button class="mode" data-m="explore"><b>🧭 未知の境界・探索5問</b><span class="mut">確定済みの基準駅を除き、未検証の境界駅を優先出題</span></button>
   <button class="mode" data-m="random"><b>🔀 全国ランダム5問</b><span class="mut">全収録駅から重複なしで出題</span></button></div>`;
   $.querySelectorAll('.mode').forEach(b=>b.onclick=()=>start(b.dataset.m));
@@ -96,7 +96,7 @@ function answer(r){
     if(v===q.rank)b.classList.add('correct');else if(v===r)b.classList.add('wrong')});
   const last=S.i===S.qs.length-1;
   document.getElementById('fb').innerHTML=`<div class="fb ${pt?'ok':'ng'}">${d===0?'⭕ 正解':'あなた '+r+' / 基準 '+q.rank}（+${pt}点）</div>
-  <div class="mut">基準ランク：${q.rank}（${RANKS[q.rank]}）／${q.status==='calibrated'?'確定基準駅':'未検証（推定値）'}</div>${q.note?`<div class="mut">📝 ${esc(q.note)}</div>`:''}
+  <div class="mut">基準ランク：${q.rank}（${RANKS[q.rank]}）／${q.status==='calibrated'?'確定基準駅':q.status==='unverified'?'未検証（手動推定）':'自動推定（精度低・参考値）'}</div>${q.note?`<div class="mut">📝 ${esc(q.note)}</div>`:''}
   <button class="primary" id="nx" style="margin-top:10px">${last?'結果を見る':'次の問題へ'}</button>`;
   document.getElementById('nx').onclick=()=>{S.i++;S.answered=false;render()};
 }
