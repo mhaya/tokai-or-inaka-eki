@@ -28,13 +28,13 @@ const PREFECTURE_STATIONS = {
     ["青森", "奥羽本線・青い森鉄道", 6, "unverified"],
     ["八戸", "八戸線・青い森鉄道", 5, "unverified"],
     ["弘前", "奥羽本線・弘南鉄道", 5, "unverified"],
-    ["新青森", "東北新幹線", 4, "unverified"],
+    ["新青森", "東北新幹線", 4, "calibrated"],
   ],
   "岩手県": [
     ["北上", "東北新幹線・東北本線", 3, "calibrated", "新幹線停車だが地方小都市・駅裏田園"],
     ["新花巻", "東北新幹線・釜石線", 2, "calibrated", "新幹線停車だが周囲田園・山林"],
     ["盛岡", "東北新幹線・東北本線・IGRいわて銀河鉄道", 8, "unverified"],
-    ["一ノ関", "東北新幹線・東北本線", 4, "unverified"],
+    ["一ノ関", "東北新幹線・東北本線", 5, "calibrated"],
     ["釜石", "釜石線・三陸鉄道", 3, "unverified"],
   ],
   "宮城県": [
@@ -119,7 +119,7 @@ const PREFECTURE_STATIONS = {
     ["明覚", "八高線", 2, "calibrated"],
     ["三峰口", "秩父鉄道", 2, "calibrated"],
     ["川越", "川越線・東武東上線", 7, "unverified"],
-    ["大宮公園", "東武野田線", 4, "unverified"],
+    ["大宮公園", "東武野田線", 5, "calibrated"],
     ["秩父", "秩父鉄道", 3, "unverified"],
   ],
   "千葉県": [
@@ -254,7 +254,7 @@ const PREFECTURE_STATIONS = {
   ],
   "石川県": [
     ["金沢", "北陸新幹線・IRいしかわ鉄道・北陸本線", 7, "calibrated"],
-    ["小松", "IRいしかわ鉄道", 4, "unverified"],
+    ["小松", "IRいしかわ鉄道", 4, "calibrated"],
     ["七尾", "のと鉄道・七尾線", 3, "unverified"],
   ],
   "福井県": [
@@ -301,7 +301,7 @@ const PREFECTURE_STATIONS = {
     ["豊橋", "東海道本線・名鉄名古屋本線・豊橋鉄道", 6, "unverified"],
     ["栄", "名古屋市営地下鉄東山線・名城線", 10, "unverified"],
     ["春日井", "中央本線", 5, "unverified"],
-    ["新安城", "名鉄名古屋本線・西尾線", 4, "unverified"],
+    ["新安城", "名鉄名古屋本線・西尾線", 4, "calibrated"],
     ["豊田市", "名鉄豊田線・三河線", 6, "calibrated"],
   ],
   "三重県": [
@@ -334,7 +334,7 @@ const PREFECTURE_STATIONS = {
     ["堺市", "阪堺線・南海高野線・南海本線", 6, "calibrated"],
     ["天王寺", "大阪環状線・大阪メトロ御堂筋線", 9, "unverified"],
     ["京橋", "大阪環状線・京阪本線", 8, "unverified"],
-    ["堺東", "南海高野線", 6, "unverified"],
+    ["堺東", "南海高野線", 6, "calibrated"],
     ["枚方市", "京阪本線", 6, "unverified"],
     ["岸和田", "南海本線", 5, "unverified"],
     ["河内長野", "南海高野線・近鉄長野線", 4, "unverified"],
@@ -346,7 +346,7 @@ const PREFECTURE_STATIONS = {
     ["尼崎", "東海道本線・福知山線・阪神本線", 7, "calibrated"],
     ["竹野", "山陰本線", 2, "calibrated"],
     ["神戸", "東海道本線・山陽本線", 8, "unverified"],
-    ["姫路", "山陽新幹線・山陽本線", 7, "unverified"],
+    ["姫路", "山陽新幹線・山陽本線", 7, "calibrated"],
     ["明石", "山陽本線・山陽電鉄", 6, "unverified"],
     ["豊岡", "山陰本線・京都丹後鉄道", 3, "unverified"],
     ["和田山", "山陰本線・播但線", 2, "unverified"],
@@ -405,7 +405,7 @@ const PREFECTURE_STATIONS = {
     ["松山", "予讃線・伊予鉄道", 5, "calibrated"],
     ["松山市", "伊予鉄道市内電車", 6, "unverified"],
     ["今治", "予讃線", 4, "unverified"],
-    ["宇和島", "予讃線・予土線", 3, "unverified"],
+    ["宇和島", "予讃線・予土線", 5, "calibrated"],
   ],
   "高知県": [
     ["はりまや橋", "とさでん交通", 6, "calibrated"],
