@@ -43,7 +43,7 @@ textarea{width:100%;min-height:150px;font:inherit;font-size:.9rem;padding:10px;b
 const RANKS={10:"超大都会",9:"大都会",8:"都会（上位）",7:"都会",6:"小都会（上位）",5:"小都会",4:"エセ田舎（都会寄り）",3:"エセ田舎",2:"田舎",1:"ド田舎"};
 const ALL=[];
 for(const [pref,rows] of Object.entries(PREFECTURE_STATIONS))
-  for(const [name,line,rank,status] of rows) ALL.push({name,line,rank,status,pref});
+  for(const [name,line,rank,status,note] of rows) ALL.push({name,line,rank,status,note,pref});
 
 const $=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -96,7 +96,7 @@ function answer(r){
     if(v===q.rank)b.classList.add('correct');else if(v===r)b.classList.add('wrong')});
   const last=S.i===S.qs.length-1;
   document.getElementById('fb').innerHTML=`<div class="fb ${pt?'ok':'ng'}">${d===0?'⭕ 正解':'あなた '+r+' / 基準 '+q.rank}（+${pt}点）</div>
-  <div class="mut">基準ランク：${q.rank}（${RANKS[q.rank]}）／${q.status==='calibrated'?'確定基準駅':'未検証（推定値）'}</div>
+  <div class="mut">基準ランク：${q.rank}（${RANKS[q.rank]}）／${q.status==='calibrated'?'確定基準駅':'未検証（推定値）'}</div>${q.note?`<div class="mut">📝 ${esc(q.note)}</div>`:''}
   <button class="primary" id="nx" style="margin-top:10px">${last?'結果を見る':'次の問題へ'}</button>`;
   document.getElementById('nx').onclick=()=>{S.i++;S.answered=false;render()};
 }
