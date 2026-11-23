@@ -4,7 +4,7 @@
 - 既存の calibrated / unverified 駅は一切変更しない。
 - Wikidata にあって未収録の現役駅を status='estimated'（自動推定）として追加する。
 - 推定ランク: 確定基準駅(calibrated)から作った「自治体人口 × 路線数」バケットの中央値（上限7）。
-  （確定データに対する検証: 平均誤差0.89 / ±1以内77%）
+  （確定データに対する検証: 平均誤差0.86 / ±1以内80% / ぴったり50%）
 """
 import json, re, sys, statistics as st
 from merge_wikidata import load
@@ -14,11 +14,17 @@ head = src.split("const PREFECTURE_STATIONS")[0]
 D = json.loads(re.sub(r",(\s*[\]}])", r"\1", src[src.index("{"):src.rindex("}") + 1]))
 for p in D: D[p] = [x for x in D[p] if x[3] != "estimated"]
 M = load(W); idx = {(e["pref"], e["name"]): e for e in M}
+def is_ward(e): return any(n.endswith("区") for n in e.get("cnames", ()))
 def pb(e):
-    p = e["pop"]; return 5 if p == 0 else 0 if p < 20000 else 1 if p < 60000 else 2 if p < 150000 else 3 if p < 400000 else 4
+    """自治体規模バケット。人口不明は町村=0 / 市=2。区(都心の昼間人口が居住人口に出ない)は粗く3段階まで"""
+    p = e["pop"]
+    if p == 0: return 0 if e.get("cnames") and all(n.endswith(("町", "村")) for n in e["cnames"]) else 2
+    b = 0 if p < 20000 else 1 if p < 60000 else 2 if p < 150000 else 3 if p < 400000 else 4
+    return min(b, 2) if is_ward(e) else b
 def key(e):
     n = 1 if e.get("noline") else len(e["lines"])
-    return ("T" if e["pref"] == "東京都" and e["pop"] == 0 else "O" if e["pop"] == 0 else "N", pb(e), 0 if n <= 1 else 1 if n == 2 else 2)
+    ward = "T" if e["pref"] == "東京都" and is_ward(e) else "O" if is_ward(e) else "N"
+    return (ward, pb(e), 0 if n <= 1 else 1 if n == 2 else 2)
 tab = {}
 for p, rs in D.items():
     for x in rs:
@@ -30,7 +36,7 @@ def estimate(e):
     k = key(e); v = tab.get(k, [])
     if len(v) < 3: v = coarse.get((k[0], k[1]), []) or [5]
     r = max(1, min(7, round(st.median(v))))
-    # 確定データは主要駅に偏るため、人口不明(東京23区・政令市の区)の単独路線駅は6を上限にする
+    # 確定データは主要駅に偏るため、区(東京23区・政令市)の単独路線駅は6を上限にする
     if k[0] != "N" and k[2] == 0: r = min(r, 6)
     return r
 have = {(p, x[0]) for p, rs in D.items() for x in rs}

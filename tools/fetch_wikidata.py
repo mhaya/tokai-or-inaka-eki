@@ -28,3 +28,31 @@ dump("B", q(f'SELECT ?s ?line ?lname WHERE {{ ?s {STATION} ?s wdt:P81 ?line. OPT
 time.sleep(5)
 # 路線(P81)が未入力の駅向けに運営会社(P137)も取得
 dump("D", q(f'SELECT ?s ?oname WHERE {{ ?s {STATION} ?s wdt:P137 ?o. ?o rdfs:label ?oname FILTER(LANG(?oname)="ja") }}'))
+time.sleep(5)
+# 所在自治体の名称（「区」を判定して人口不明の町村と区を区別する）と駅の座標
+dump("E", q(f'SELECT DISTINCT ?c ?cname WHERE {{ ?s {STATION} ?s wdt:P131 ?c. ?c rdfs:label ?cname FILTER(LANG(?cname)="ja") }}'))
+time.sleep(5)
+dump("F", q(f'SELECT ?s ?coord WHERE {{ ?s {STATION} ?s wdt:P625 ?coord }}'))
+time.sleep(5)
+# 町丁レベルの所在地から親の自治体を1階層ずつ辿る（再帰パスは重く切れるため、軽い単純クエリを小分けで）
+def chunks(xs, n=100):
+    for i in range(0, len(xs), n): yield xs[i:i + n]
+level = sorted({x["c"]["value"].rsplit("/", 1)[1] for x in json.load(open(f"{OUT}/E.json"))})
+edges, seen, ids = [], set(level), set(level)
+for depth in range(4):
+    nxt = set()
+    for ch in chunks(level):
+        vals = " ".join("wd:" + c for c in ch)
+        for r in q(f'SELECT ?c ?m WHERE {{ VALUES ?c {{{vals}}} ?c wdt:P131 ?m }}'):
+            c, m = r["c"]["value"].rsplit("/", 1)[1], r["m"]["value"].rsplit("/", 1)[1]
+            edges.append([c, m]); nxt.add(m)
+        time.sleep(1)
+    level = sorted(nxt - seen); seen |= nxt; ids |= nxt
+    print("depth", depth, "new", len(level), flush=True)
+    if not level: break
+dump("G", edges)
+labels = []
+for ch in chunks(sorted(ids), 200):
+    vals = " ".join("wd:" + c for c in ch)
+    labels += q(f'SELECT ?c ?l WHERE {{ VALUES ?c {{{vals}}} ?c rdfs:label ?l FILTER(LANG(?l)="ja") }}'); time.sleep(1)
+dump("H", labels)
