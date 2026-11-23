@@ -43,6 +43,7 @@ const PREFECTURE_STATIONS = {
     ["石巻", "仙石線・石巻線", 3, "calibrated"],
     ["古川", "東北新幹線・陸羽東線", 4, "unverified"],
     ["長町", "東北本線・仙台市営地下鉄南北線", 7, "unverified"],
+    ["長町南", "仙台市営地下鉄南北線", 5, "calibrated"],
   ],
   "秋田県": [
     ["秋田", "奥羽本線・羽越本線・秋田新幹線", 7, "unverified"],
@@ -68,6 +69,7 @@ const PREFECTURE_STATIONS = {
     ["つくば", "つくばエクスプレス", 5, "unverified"],
     ["取手", "常磐線・関東鉄道常総線", 5, "unverified"],
     ["みどりの", "つくばエクスプレス", 3, "calibrated"],
+    ["みらい平", "つくばエクスプレス", 3, "calibrated"],
   ],
   "栃木県": [
     ["宇都宮", "東北本線・東北新幹線", 8, "calibrated", "県庁中核・全方位発展"],
@@ -91,7 +93,7 @@ const PREFECTURE_STATIONS = {
     ["湯檜曽", "上越線", 1, "calibrated"],
     ["土合", "上越線", 1, "calibrated"],
     ["前橋", "両毛線", 6, "unverified"],
-    ["太田", "東武伊勢崎線", 5, "unverified"],
+    ["太田", "東武伊勢崎線", 4, "calibrated"],
   ],
   "埼玉県": [
     ["大宮", "東北新幹線・宇都宮線・埼京線ほか", 9, "calibrated"],
@@ -238,12 +240,13 @@ const PREFECTURE_STATIONS = {
     ["逗子", "横須賀線・京急逗子線", 5, "unverified"],
     ["三崎口", "京急久里浜線", 3, "unverified"],
     ["秦野", "小田急小田原線", 5, "calibrated"],
+    ["上大岡", "京急本線・横浜市営地下鉄ブルーライン", 6, "calibrated"],
   ],
   "新潟県": [
     ["新潟", "上越新幹線・信越本線", 7, "calibrated"],
     ["長岡", "上越新幹線・信越本線", 5, "calibrated", "地方都市拠点は5"],
     ["上越妙高", "北陸新幹線・えちごトキめき鉄道", 4, "unverified"],
-    ["越後湯沢", "上越新幹線・上越線", 3, "unverified"],
+    ["越後湯沢", "上越新幹線・上越線", 2, "calibrated"],
   ],
   "富山県": [
     ["富山", "北陸新幹線・あいの風とやま鉄道・富山地方鉄道", 7, "unverified"],
@@ -274,6 +277,7 @@ const PREFECTURE_STATIONS = {
     ["長野", "北陸新幹線・しなの鉄道・長野電鉄", 7, "unverified"],
     ["松本", "篠ノ井線・大糸線・アルピコ交通", 6, "unverified"],
     ["佐久平", "北陸新幹線・小海線", 4, "unverified"],
+    ["上田", "しなの鉄道・上田電鉄別所線", 5, "calibrated"],
   ],
   "岐阜県": [
     ["可児", "太多線", 4, "calibrated"],
@@ -298,11 +302,12 @@ const PREFECTURE_STATIONS = {
     ["栄", "名古屋市営地下鉄東山線・名城線", 10, "unverified"],
     ["春日井", "中央本線", 5, "unverified"],
     ["新安城", "名鉄名古屋本線・西尾線", 4, "unverified"],
+    ["豊田市", "名鉄豊田線・三河線", 6, "calibrated"],
   ],
   "三重県": [
     ["四日市", "関西本線・近鉄名古屋線", 5, "calibrated"],
     ["伊勢中川", "近鉄大阪線・名古屋線・山田線", 4, "calibrated", "近鉄3幹線交差の巨大ジャンクション最低保証4"],
-    ["津", "紀勢本線・近鉄名古屋線", 5, "unverified"],
+    ["津", "紀勢本線・近鉄名古屋線", 5, "calibrated"],
     ["伊勢市", "参宮線・近鉄山田線", 4, "unverified"],
   ],
   "滋賀県": [
@@ -382,7 +387,7 @@ const PREFECTURE_STATIONS = {
   ],
   "山口県": [
     ["下関", "山陽本線", 5, "unverified"],
-    ["新山口", "山陽新幹線・山陽本線・山口線", 4, "unverified"],
+    ["新山口", "山陽新幹線・山陽本線・山口線", 5, "calibrated"],
     ["山口", "山口線", 3, "unverified"],
     ["徳山", "山陽本線", 5, "unverified"],
   ],
@@ -439,7 +444,7 @@ const PREFECTURE_STATIONS = {
   ],
   "大分県": [
     ["大分", "日豊本線・久大本線", 7, "unverified"],
-    ["別府", "日豊本線", 5, "unverified"],
+    ["別府", "日豊本線", 5, "calibrated"],
     ["日田", "久大本線", 3, "unverified"],
   ],
   "宮崎県": [
