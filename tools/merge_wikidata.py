@@ -6,6 +6,19 @@ def load(W):
     L = lambda n: json.load(open(f"{W}/{n}.json"))
     A, B, C, P, D = L("A"), L("B"), L("C"), L("prefs"), L("D")
     cname = {x["c"]["value"].rsplit("/", 1)[1]: x["cname"]["value"] for x in L("E")}
+    par = collections.defaultdict(list)
+    for c, m in L("G"): par[c].append(m)
+    lab = {x["c"]["value"].rsplit("/", 1)[1]: x["l"]["value"] for x in L("H")}
+    def muni(c):
+        """町丁レベルの所在地から、最も近い 区→市町村 の祖先（QID, 名称）を返す"""
+        frontier, seen = [c], {c}
+        for _ in range(5):
+            for q in frontier:
+                if lab.get(q, "").endswith(("区", "市", "町", "村")): return q, lab[q]
+            frontier = [m for q in frontier for m in par.get(q, []) if m not in seen]
+            seen |= set(frontier)
+            if not frontier: break
+        return None, None
     coord = {}
     for x in L("F"):
         m = re.match(r"Point\(([-\d.]+) ([-\d.]+)\)", x["coord"]["value"])
@@ -42,7 +55,8 @@ def load(W):
         e = merged.setdefault((pref, name), {"pref": pref, "name": name, "lines": {}, "pop": 0, "cities": set()})
         e["lines"].update(lines.get(s) or {}); e["cities"] |= d["cities"]
         if not lines.get(s): e["noline"] = True; e["ops"] = e.get("ops", set()) | ops[s]
-        e["pop"] = max([e["pop"]] + [pop.get(c, 0) for c in d["cities"]])
-        e["cnames"] = e.get("cnames", set()) | {cname[c] for c in d["cities"] if c in cname}
+        ms = [muni(c) for c in d["cities"]]
+        e["pop"] = max([e["pop"]] + [pop.get(m, 0) for m, _ in ms if m])
+        e["cnames"] = e.get("cnames", set()) | {n for _, n in ms if n}
         if s in coord: e.setdefault("coords", []).append(coord[s])
     return list(merged.values())
